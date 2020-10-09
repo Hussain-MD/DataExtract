@@ -1,8 +1,10 @@
+#The shell script connects to ODBC Databse, runs the query passed as input and saves the extracted data into CSV file
+
 $server = " " #Database Server IP
 $database = " " #Database Name
 $username = " " #Database Username
 $password = " " #Database Password
-$tablequery = " " #Query
+$tablequery = " " #Query to be extraced and saved to csv
 
     # Connection 
     $connectionString = "DRIVER={IBM i Access ODBC Driver};
