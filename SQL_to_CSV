@@ -1,10 +1,10 @@
 #The shell script connects to SQL table, runs the query passed as input and saves the extracted data into CSV file
 
-$server = " " //Add server IP
-$database = " " //Add Database SID 
-$username = " " // Database Username
-$password = " "// Databse Password
-$tablequery = " " //Query from which data needs to be fetched and extracted to CSV
+$server = " " #Databse server IP
+$database = " " #Database SID 
+$username = " " # Database Username
+$password = " "# Databse Password
+$tablequery = " " #Query from which data needs to be fetched and extracted to CSV
 
 #Delcare Connection Variables
 $SQLConnection = New-Object System.Data.SQLClient.SQLConnection 
@@ -30,7 +30,7 @@ $SQLConnection.Close()
     $queryData = "SELECT * FROM [$($Row[0])].[$($Row[1])]"
 
     #Specify the output location of your dump file
-    $extractFile = "Path\$($Row[0]).$($Row[1]).csv"
+    $extractFile = "Path\$($Row[0]).$($Row[1]).csv" #The file will be saved with the format "SID.TableName"
 
     $command.CommandText = $queryData
     $command.Connection = $SQLconnection
