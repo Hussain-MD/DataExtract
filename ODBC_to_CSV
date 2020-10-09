@@ -1,0 +1,25 @@
+$server = " " #Database Server IP
+$database = " " #Database Name
+$username = " " #Database Username
+$password = " " #Database Password
+$tablequery = " " #Query
+
+    # Connection 
+    $connectionString = "DRIVER={IBM i Access ODBC Driver};
+                 system = $server ;
+                 uid=$username;
+                 pwd=$password"
+	$connection = New-Object System.Data.Odbc.OdbcConnection($connectionString)
+	$connection.Open()
+    $command = New-Object system.Data.Odbc.OdbcCommand($tablequery,$connection) 
+	
+	$rdr = $command.ExecuteReader()
+	
+	$dataSet =[System.Data.DataTable]::New()
+	$dataSet.Load($rdr)
+	$connection.Close()
+
+    $extractFile = "Path\BPCS\NameOFFile.csv"
+
+    $DataSet | Export-Csv $extractFile -NoTypeInformation
+	
