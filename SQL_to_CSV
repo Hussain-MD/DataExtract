@@ -1,0 +1,45 @@
+#The shell script connects to SQL table, runs the query passed as input and saves the extracted data into CSV file
+
+$server = " " //Add server IP
+$database = " " //Add Database SID 
+$username = " " // Database Username
+$password = " "// Databse Password
+$tablequery = " " //Query from which data needs to be fetched and extracted to CSV
+
+#Delcare Connection Variables
+$SQLConnection = New-Object System.Data.SQLClient.SQLConnection 
+$SQLConnection.ConnectionString ="Server = $server; Database = $database; Integrated Security = False; User ID = $username; Password = $password;"
+$SQLConnection.Open() 
+
+$command = New-Object System.Data.SqlClient.SqlCommand
+$command.CommandText = $tablequery
+$command.Connection = $SQLConnection
+
+#Load up the Tables in a dataset
+#|  Where {$_} 
+$SqlAdapter = New-Object System.Data.SqlClient.SqlDataAdapter
+
+$SqlAdapter.SelectCommand = $command
+$DataSet = New-Object System.Data.DataSet
+$SqlAdapter.Fill($DataSet)
+$SQLConnection.Close()
+
+# Loop through all tables and export a CSV of the Table Data
+#foreach ($Row in $DataSet.Tables[0].Rows)
+#{
+    $queryData = "SELECT * FROM [$($Row[0])].[$($Row[1])]"
+
+    #Specify the output location of your dump file
+    $extractFile = "Path\$($Row[0]).$($Row[1]).csv"
+
+    $command.CommandText = $queryData
+    $command.Connection = $SQLconnection
+
+    $SqlAdapter = New-Object System.Data.SqlClient.SqlDataAdapter
+    $SqlAdapter.SelectCommand = $command
+    $DataSet = New-Object System.Data.DataSet
+    $SqlAdapter.Fill($DataSet)
+    $SQLConnection.Close()
+
+    $DataSet.Tables[0] | Export-Csv $extractFile -NoTypeInformation
+#}
